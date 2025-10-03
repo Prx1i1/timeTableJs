@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import './App.css';
 
 import Grid from "@mui/material/Grid"
@@ -30,22 +30,27 @@ interface cellRes{
 
 function App() {
     //data for makeshift
+  let temp = 0;
   let dataShifts: timeRange| null = null;
   let firstTime: number| undefined;
   let firstDay: number| undefined; 
+
+  
 
   //function to pass in shift maker slot
 
   const makeShift = (day?: number| undefined, timeStart?: number | undefined, timeEnd?: number| undefined): void => {
     //set first point
-    if (dataShifts == null){
+    if (temp == 0){
       let time = timeStart
       firstDay = day
       firstTime = time
-
+      console.log("added first")
+      temp+=1
       //maybe add highlight here
     }else{
       //make time zone
+      console.log("second", day, firstDay)
       if (day === firstDay){
 
         let time = timeEnd
@@ -56,13 +61,17 @@ function App() {
           end: Math.max(firstTime!, time!)
         }
 
+        console.log("adding timeshift", dataShifts)
+
         //add to employee
         employees.find((e) => e.id === id)?.times.push(dataShifts)
         //reset page
         updateEmployees(employees)
+        console.log(employees)
 
         //reset
         dataShifts = null
+        temp = 0
 
       }else{
         //pass or cancel?
@@ -87,7 +96,7 @@ function App() {
   let employees: employeeCard[] = [{id: 1, times: [ {day: 2, start: 2, end: 3} ]}]
   const [employeesList, updateEmployees] = useState<employeeCard[]>(employees)
 
-  const createTimeSpace = (): ReactElement[] => {
+  const createTimeSpace = (e: employeeCard[]): ReactElement[] => {
 
     let temp: ReactElement[] = [];
 
@@ -152,7 +161,7 @@ function App() {
         ))}
         
         {/* content */}
-        {createTimeSpace()}
+        {createTimeSpace(employeesList)}
 
         </Grid>
       </div>

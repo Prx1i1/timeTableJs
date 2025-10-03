@@ -9,26 +9,29 @@ interface ItemProps{
     taken?: boolean
 }
 
-const createShift = (propF?: ((day?: number, timeStart?: number, timeEnd?: number) => void), day?: number, timeStart?: number, timeEnd?: number) :void => {
-    if (propF != undefined){
-        propF(day, timeStart, timeEnd)
-
-    }
-}
 
 const Item: FC<ItemProps> = (prop?) => {
     // const [background, setBackground] = useState<string>("white")
     // if (prop?.taken == true){
     //     setBackground("red")
     // }
+    const createShift = (propF?: ((day?: number, timeStart?: number, timeEnd?: number) => void), day?: number, timeStart?: number, timeEnd?: number) :void => {
+        if (propF != undefined){
+            propF(day, timeStart, timeEnd)
+            //debug
+            setBackground("blue")
+        }
+    }
 
     let background = "white"
     if (prop?.taken){
         background = "red"
     }
 
+    const [backgroundHook, setBackground] = useState<string>(background)
+
     const style = {
-      backgroundColor: background,
+      backgroundColor: backgroundHook,
     };
     return(
         <div
