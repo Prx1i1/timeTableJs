@@ -17,3 +17,17 @@ code {
 
 }
 
+.scheduleMain{
+  display: inline-flex;
+  width: 80%;
+}
+
+.scheduleList{
+  display: block;
+  width: 100%;
+}
+
+.scheduleMain > div {
+  padding: 2px;
+  border: 1px solid black;
+}

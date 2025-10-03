@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import './App.css';
 
 import Grid from "@mui/material/Grid"
@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid"
 import { Card, Paper, styled } from '@mui/material';
 
 import Item from "./component/Item"
+import ScheduleTile from './component/ScheduleTile';
 
 let days: String[] = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
 let id = 1; //checked employee id
@@ -37,8 +38,25 @@ function App() {
   let firstTime: number| undefined;
   let firstDay: number| undefined; 
 
+  const [employeesList, updateEmployees] = useState<employeeCard[]>(employees)
+  const [counter, resetPage] = useState<number>(0)
+
+  const PageContext = createContext(employeesList)
+  const ResetContext = createContext(counter)
 
   //function to pass in shift maker slot
+
+  const removeSchedule = (id: number, day:number, timeStart: number, timeEnd: number) => {
+    let employees = employeesList 
+    let index: number = employeesList.findIndex((e) => (e.id == id))!
+    employees[index].times.splice(employeesList.find((e) => (e.id == id))?.times.findIndex((e) => (e.day == day && e.start == timeStart && e.end == timeEnd))!, 1)
+    updateEmployees(employees)
+
+    resetPage(counter+1)
+
+    console.log("schedule removed", employeesList)
+
+  }
 
   const makeShift = (day?: number| undefined, timeStart?: number | undefined, timeEnd?: number| undefined): void => {
     //set first point
@@ -65,10 +83,12 @@ function App() {
         console.log("adding timeshift", dataShifts)
 
         //add to employee
-        employees.find((e) => e.id === id)?.times.push(dataShifts)
+        let employee = employeesList
+        employee.find((e) => e.id === id)?.times.push(dataShifts)
         //reset page
-        updateEmployees(employees)
-        console.log(employees)
+        updateEmployees(employee)
+        resetPage(counter+1)
+        console.log(employee)
 
         //reset
         dataShifts = null
@@ -92,10 +112,6 @@ function App() {
   //   }),
   // }));
 
-
-  const [employeesList, updateEmployees] = useState<employeeCard[]>(employees)
-
-  const PageContext = createContext(employeesList)
 
   const createTimeSpace = (e: employeeCard[]): ReactElement[] => {
 
@@ -126,6 +142,7 @@ function App() {
   const checkEmployee = (id: number, day: number, start: number, end: number): cellRes => {
     let cellText: string = String(0);
     let taken: boolean = false;
+    let employees = employeesList;
     employees.forEach((e) => {
       if (e.id === id){
 
@@ -147,10 +164,27 @@ function App() {
 
   }
 
+  const generateScheduleList = (id: number): ReactElement[] => {
+    let temp: ReactElement[] = [];
+    let ref = employeesList.find((e) => e.id === id)?.times
+
+    ref?.forEach((time) => {
+      temp.push(<ScheduleTile id={id} day={time.day} timeStart={time.start} timeEnd={time.end} removeSchedule={removeSchedule}/>)
+    })
+
+    return temp
+  }
+
   return (
     <div className="App">
+      <ResetContext value={0}>
       <header>
         <label><input type='text' onChange={(e) => console.log(e.target.textContent)}></input></label>
+        <PageContext value={employeesList}>
+          <div className='scheduleList'>
+            {generateScheduleList(id)}
+          </div>
+        </PageContext>
       </header>
       <div className='scheduleContainer'>
         <PageContext value={employeesList}>
@@ -168,6 +202,7 @@ function App() {
         </Grid>
         </PageContext>
       </div>
+      </ResetContext>
     </div>
   );
 }
