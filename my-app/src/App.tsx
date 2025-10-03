@@ -44,7 +44,9 @@ function App() {
   const PageContext = createContext(employeesList)
   const ResetContext = createContext(counter)
 
-  //function to pass in shift maker slot
+  const scheduleResolver = (id: number) => {
+
+  }
 
   const removeSchedule = (id: number, day:number, timeStart: number, timeEnd: number) => {
     let employees = employeesList 
@@ -182,6 +184,12 @@ function App() {
         <label><input type='text' onChange={(e) => console.log(e.target.textContent)}></input></label>
         <PageContext value={employeesList}>
           <div className='scheduleList'>
+            <div className='scheduleMain'>
+            <div>id</div>
+            <div>dzień</div>
+            <div>czas</div>
+            <div></div>
+          </div>
             {generateScheduleList(id)}
           </div>
         </PageContext>
