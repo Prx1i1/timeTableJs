@@ -1,0 +1,6 @@
+      {times[t].startH}:
+      {times[t].startM < 10 ? "0": ""}
+      {times[t].startM}-
+      {times[t].endH}:
+      {times[t].endM < 10 ? "0": ""}
+      {times[t].endM}
