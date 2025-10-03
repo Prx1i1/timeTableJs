@@ -31,12 +31,12 @@ interface cellRes{
 function App() {
     //data for makeshift
   let dataShifts: timeRange| null = null;
-  let firstTime: number|null = null;
-  let firstDay: number|null = null; 
+  let firstTime: number| undefined;
+  let firstDay: number| undefined; 
 
   //function to pass in shift maker slot
 
-  const makeShift = (day: number, timeStart: number, timeEnd: number, ) => {
+  const makeShift = (day?: number| undefined, timeStart?: number | undefined, timeEnd?: number| undefined): void => {
     //set first point
     if (dataShifts == null){
       let time = timeStart
@@ -51,9 +51,9 @@ function App() {
         let time = timeEnd
 
         dataShifts = {
-          day: day,
-          start: Math.min(firstTime!, time),
-          end: Math.max(firstTime!, time)
+          day: day!,
+          start: Math.min(firstTime!, time!),
+          end: Math.max(firstTime!, time!)
         }
 
         //add to employee
@@ -101,7 +101,8 @@ function App() {
       for (let index = 1; index <= days.length; index++) {
         let res: cellRes = checkEmployee(id, index, times[t].start, times[t].end)
         const element = <Grid size={1}>
-          <Item day={index} timeStart={times[t].start} timeEnd={times[t].end} text={res.text} taken={res.active}/>
+          
+          <Item shiftMaker={makeShift} day={index} timeStart={times[t].start} timeEnd={times[t].end} text={res.text} taken={res.active}/>
           
         </Grid>;
         temp.push(element)

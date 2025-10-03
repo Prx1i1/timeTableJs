@@ -5,11 +5,11 @@ interface ItemProps{
     timeStart?: number,
     timeEnd?: number,
     borderType?: boolean[],
-    shiftMaker?: () => null,
+    shiftMaker?: (day?: number, timeStart?: number, timeEnd?: number) => void,
     taken?: boolean
 }
 
-const createShift = (propF?: ((day?: number, timeStart?: number, timeEnd?: number) => null), day?: number, timeStart?: number, timeEnd?: number) => {
+const createShift = (propF?: ((day?: number, timeStart?: number, timeEnd?: number) => void), day?: number, timeStart?: number, timeEnd?: number) :void => {
     if (propF != undefined){
         propF(day, timeStart, timeEnd)
 
