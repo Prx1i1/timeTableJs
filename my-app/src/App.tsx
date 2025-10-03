@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import './App.css';
 
 import Grid from "@mui/material/Grid"
@@ -9,6 +9,8 @@ import Item from "./component/Item"
 
 let days: String[] = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
 let id = 1; //checked employee id
+let times: timeRange[] = [{day: 0, start: 1,end: 2}, {day: 0, start: 2, end: 3}, {day: 0 , start:3, end:4}]
+let employees: employeeCard[] = [{id: 1, times: [ {day: 2, start: 2, end: 3} ]}]
 
 interface employeeCard{
   id: number,
@@ -35,7 +37,6 @@ function App() {
   let firstTime: number| undefined;
   let firstDay: number| undefined; 
 
-  
 
   //function to pass in shift maker slot
 
@@ -91,10 +92,10 @@ function App() {
   //   }),
   // }));
 
-  let times: timeRange[] = [{day: 0, start: 1,end: 2}, {day: 0, start: 2, end: 3}, {day: 0 , start:3, end:4}]
 
-  let employees: employeeCard[] = [{id: 1, times: [ {day: 2, start: 2, end: 3} ]}]
   const [employeesList, updateEmployees] = useState<employeeCard[]>(employees)
+
+  const PageContext = createContext(employeesList)
 
   const createTimeSpace = (e: employeeCard[]): ReactElement[] => {
 
@@ -152,6 +153,7 @@ function App() {
         <label><input type='text' onChange={(e) => console.log(e.target.textContent)}></input></label>
       </header>
       <div className='scheduleContainer'>
+        <PageContext value={employeesList}>
         <Grid container columns={8}>
         <Grid size={1}><Item/></Grid>
         {days.map((day) => (
@@ -164,6 +166,7 @@ function App() {
         {createTimeSpace(employeesList)}
 
         </Grid>
+        </PageContext>
       </div>
     </div>
   );
