@@ -29,7 +29,10 @@ interface cellRes{
   text: string
 }
 
-
+interface daySchedule{
+  day: number
+  times: timeRange[]
+}
 
 function App() {
     //data for makeshift
@@ -45,6 +48,18 @@ function App() {
   const ResetContext = createContext(counter)
 
   const scheduleResolver = (id: number) => {
+    let schedule: timeRange[] = employeesList.find((e) => e.id === id)!.times
+    let daySchedules: daySchedule[] = []
+
+    for (let index = 1; index <= days.length; index++) {
+      let temp: daySchedule = {day: index, times: []}
+
+      schedule.forEach((e) => {
+        if(e.day === index){
+          temp.times.push()
+        }
+      })
+    }
 
   }
 

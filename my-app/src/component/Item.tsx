@@ -16,7 +16,7 @@ const Item: FC<ItemProps> = (prop?) => {
     //     setBackground("red")
     // }
     const createShift = (propF?: ((day?: number, timeStart?: number, timeEnd?: number) => void), day?: number, timeStart?: number, timeEnd?: number) :void => {
-        if (propF != undefined){
+        if (propF !== undefined){
             propF(day, timeStart, timeEnd)
             //debug
             setBackground("blue")
